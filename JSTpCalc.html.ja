@@ -21,34 +21,39 @@
   <body>
     <script type="text/javascript">
       <!--
-          function calcfrequency() {
-          var demands    = parseFloat(document.calcfreq.demands.value);
-          var capacities = parseFloat(document.calcfreq.capacities.value);
-          return 730 * capacities / demands;
+          sec_per_oneday = 2
+          sec_per_year = sec_per_oneday * 365
+
+          function calcfrequency(capacities, demands) {
+          return sec_per_year * capacities / demands;
           }
 
           function showfreq() {
-          document.calcfreq.result.value = calcfrequency();
+          var demands    = parseFloat(document.calcfreq.demands.value);
+          var capacities = parseFloat(document.calcfreq.capacities.value);
+          document.calcfreq.result.value = calcfrequency(capacities, demands);
           }
 
-          function calccapacity() {
+          function calccapacity(demands, frequencies) {
           var demands     = parseFloat(document.calccap.demands.value);
           var frequencies = parseFloat(document.calccap.frequencies.value);
-          return demands * frequencies / 730;
+          return demands * frequencies / sec_per_year;
           }
 
           function showcap() {
-          document.calccap.result.value  = calccapacity();
+          var demands     = parseFloat(document.calccap.demands.value);
+          var frequencies = parseFloat(document.calccap.frequencies.value);
+          document.calccap.result.value  = calccapacity(demands, frequencies);
           }
 
-          function calcrate() {
-          var capacities  = parseFloat(document.calcrate.capacities.value);
-          var frequencies = parseFloat(document.calcrate.frequencies.value);
-          return 730 * capacities / frequencies;
+          function calcrate(capacities, frequencies) {
+          return sec_per_year * capacities / frequencies;
           }
 
           function showrate() {
-          document.calcrate.result.value = calcrate();
+          var capacities  = parseFloat(document.calcrate.capacities.value);
+          var frequencies = parseFloat(document.calcrate.frequencies.value);
+          document.calcrate.result.value = calcrate(capacities, frequencies);
           }
           // -->
     </script>
@@ -59,7 +64,7 @@
       需要と一台あたりの貨物容量から理想的な運行頻度を算出します。<BR>
       算出された頻度に近づく程利益は大きくなり、上回る程に供給過剰になります。<BR>
       容量が一定である車両路線に有効です。<BR>
-      <式> 730 × 容量 ÷需要(年) ＝ 運行頻度<BR>
+      <式> 730 × 容量 ÷需要(年) ＝ 運行頻度(秒)<BR>
     </p>
     <form name="calcfreq" action="#">
       730 × 
@@ -78,7 +83,7 @@
       予め、テスト走行で運行頻度を確認してから頻度間隔を入力する必要があり、<BR>
       実際の貨物容量で遅延が認められる場合は再計算が必要になります。<BR>
       過大容量は複編成に分割する事で解決出来ます。<BR>
-      <式> 需要(年) × 運行頻度 ÷ 730 ＝ 貨物容量<BR>
+      <式> 需要(年) × 運行頻度(秒) ÷ 730 ＝ 貨物容量<BR>
     </p>
     <form name="calccap" action="#">
       <input type="text" name="demands">
@@ -96,7 +101,7 @@
       貨物容量と運行頻度から一年あたり平均どの位の運送能力があるかを算出します。<BR>
       複数の路線でサプライチェーンを築く場合や現在の路線が実際にどれだけの運送能力があるかを確認するのに使えます。<BR>
       また、頻度演算や容量演算で算出された数値を入力すると求めに用いた需要(年)と近似になります。<BR>
-      <式> 730 × 容量 ÷ 運行頻度 ＝ レート(年)<BR>
+      <式> 730 × 容量 ÷ 運行頻度(秒) ＝ レート(年)<BR>
     </p>
     <form name="calcrate" action="#">
       730 × 
