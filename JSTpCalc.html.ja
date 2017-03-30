@@ -17,8 +17,17 @@
     -->
   <head>
     <title>JS Tpcalc - Transport Fever Caluculation Support Utility</title>
+    <style type="text/css">
+      <!--
+          H2 {color: #ffb608;}
+          button {background: #bfd89e; color: #2e3a50; border-style: none; border-radius: 7.5px;}
+          button:hover {background: #ffc618;}
+          input {background: #3e4a60; color: #d89ed2; font-size: 101%; text-align: center; border-style: none;}
+          body.darktheme {color: #eeeeee;background: #2e3a50;}
+        -->
+    </style>
   </head>
-  <body>
+  <body class="darktheme">
     <script type="text/javascript">
       <!--
           sec_per_oneday = 2
@@ -72,7 +81,7 @@
        ÷ 
       <input type="text" name="demands">
        ＝ 
-      <input type="button" value="算出" onclick="showfreq()">
+      <button type="button" onclick="showfreq()">算出</button>
       <input type="text" name="result" value="">
     </form>
 
@@ -90,8 +99,8 @@
        × 
       <input type="text" name="frequencies">
       ÷ 730
-       ＝ 
-      <input type="button" value="算出" onclick="showcap()">
+      ＝
+      <button type="button" onclick="showcap()">算出</button>
       <input type="text" name="result">
     </form>
 
@@ -109,7 +118,7 @@
        ÷ 
       <input type="text" name="frequencies">
       ＝
-      <input type="button" value="算出" onclick="showrate()">
+      <button type="button" onclick="showrate()">算出</button>
       <input type="text" name="result">
   </body>
 </html>
