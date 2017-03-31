@@ -20,7 +20,7 @@
     <style type="text/css">
       <!--
           H2 {color: #ffb608;}
-          button {background: #bfd89e; color: #2e3a50; border-style: none; border-radius: 7.5px;}
+          button {background: #b0b7c1; color: #2e3a50; border-style: none; border-radius: 7.5px;}
           button:hover {background: #ffc618;}
           input {background: #3e4a60; color: #d89ed2; font-size: 101%; text-align: center; border-style: none;}
           body.darktheme {color: #eeeeee;background: #2e3a50;}
