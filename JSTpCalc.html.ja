@@ -77,12 +77,12 @@
     </p>
     <form name="calcfreq" action="#">
       730 × 
-      <input type="text" name="capacities">
+      <input type="text" name="capacities" placeholder="貨物容量を入力">
        ÷ 
-      <input type="text" name="demands">
+      <input type="text" name="demands"    placeholder="需要(和)を入力">
        ＝ 
       <button type="button" onclick="showfreq()">算出</button>
-      <input type="text" name="result" value="">
+      <input type="text" name="result"     placeholder="">
     </form>
 
     
@@ -95,13 +95,13 @@
       <式> 需要(年) × 運行頻度(秒) ÷ 730 ＝ 貨物容量<BR>
     </p>
     <form name="calccap" action="#">
-      <input type="text" name="demands">
+      <input type="text" name="demands"     placeholder="需要(和)を入力">
        × 
-      <input type="text" name="frequencies">
+      <input type="text" name="frequencies" placeholder="運行頻度(秒)を入力">
       ÷ 730
       ＝
       <button type="button" onclick="showcap()">算出</button>
-      <input type="text" name="result">
+      <input type="text" name="result"      placeholder="">
     </form>
 
     
@@ -114,11 +114,11 @@
     </p>
     <form name="calcrate" action="#">
       730 × 
-      <input type="text" name="capacities">
+      <input type="text" name="capacities"  placeholder="貨物容量を入力">
        ÷ 
-      <input type="text" name="frequencies">
+      <input type="text" name="frequencies" placeholder="運行頻度(秒)を入力">
       ＝
       <button type="button" onclick="showrate()">算出</button>
-      <input type="text" name="result">
+      <input type="text" name="result"      placeholder="">
   </body>
 </html>
