@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <meta charset="UTF-8">
+  <!-- Copyright (C) 2017 trainbird999
+
+      This program is free software: you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation, either version 3 of the License, or
+      (at your option) any later version.
+      
+      This program is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+      
+      You should have received a copy of the GNU General Public License
+      along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    -->
+  <head>
+    <title>JS Tpcalc - Transport Fever Caluculation Support Utility</title>
+    <style type="text/css">
+      <!--
+          H2 {color: #ffb608;}
+          button {background: #b0b7c1; color: #2e3a50; border-style: none; border-radius: 7.5px;}
+          button:hover {background: #ffc618;}
+          input {background: #3e4a60; color: #d89ed2; font-size: 101%; text-align: center; border-style: none;}
+          body.darktheme {color: #eeeeee;background: #2e3a50;}
+        -->
+    </style>
+  </head>
+  <body class="darktheme">
+    <script type="text/javascript">
+      <!--
+          sec_per_oneday = 2
+          sec_per_year = sec_per_oneday * 365
+
+          function calcfrequency(capacities, demands) {
+          return sec_per_year * capacities / demands;
+          }
+
+          function showfreq() {
+          var demands    = parseFloat(document.calcfreq.demands.value);
+          var capacities = parseFloat(document.calcfreq.capacities.value);
+          document.calcfreq.result.value = calcfrequency(capacities, demands);
+          }
+
+          function calccapacity(demands, frequencies) {
+          var demands     = parseFloat(document.calccap.demands.value);
+          var frequencies = parseFloat(document.calccap.frequencies.value);
+          return demands * frequencies / sec_per_year;
+          }
+
+          function showcap() {
+          var demands     = parseFloat(document.calccap.demands.value);
+          var frequencies = parseFloat(document.calccap.frequencies.value);
+          document.calccap.result.value  = calccapacity(demands, frequencies);
+          }
+
+          function calcrate(capacities, frequencies) {
+          return sec_per_year * capacities / frequencies;
+          }
+
+          function showrate() {
+          var capacities  = parseFloat(document.calcrate.capacities.value);
+          var frequencies = parseFloat(document.calcrate.frequencies.value);
+          document.calcrate.result.value = calcrate(capacities, frequencies);
+          }
+          // -->
+    </script>
+    
+    
+    <H2>Frequency Calculation</H2>
+    <p>
+      Calculates a better line frequency(in sec) from demand(s) and vehicle cargo capacity.<BR>
+      Your line going closer to calculated result will get more benefits.<BR>
+      Your line going over from calculated result to larger will more lose your money.<BR>
+      This calculation is useful for static capacity vehicle line like buses, ships and air planes.<BR>
+      &lt;exp&gt; 730 × Capacity ÷Ddemand(s) ＝ Frequency(in sec)<BR>
+    </p>
+    <form name="calcfreq" action="#">
+      730 × 
+      <input type="text" name="capacities" placeholder="input your capacity">
+       ÷ 
+      <input type="text" name="demands"    placeholder="input your demand">
+       ＝ 
+      <button type="button" onclick="showfreq()">Do it now</button>
+      <input type="text" name="result"     placeholder="">
+    </form>
+
+    
+    <H2>Capacity Calculation</H2>
+    <p>
+      Calculates a better line capacity from demand(s) and line frequency(in sec).<BR>
+      At first, you are needed to take a best frequency time in game with locomotives and a cargo car you supposed.<BR>
+      and That is needed re-calculation again, if it is getting slower or record faster.<BR>
+      Getting too larger capacites will be resolved to split the line with new vehicle.<BR>
+      This calculation is useful for flexible vehicle line.<BR>
+      &lt;exp&gt; Demand(s) × Frequency(in sec) ÷ 730 ＝ Capacity<BR>
+    </p>
+    <form name="calccap" action="#">
+      <input type="text" name="demands"     placeholder="input your demand">
+       × 
+      <input type="text" name="frequencies" placeholder="input your frequency">
+      ÷ 730
+      ＝
+      <button type="button" onclick="showcap()">Do it now</button>
+      <input type="text" name="result"      placeholder="">
+    </form>
+
+    
+    <H2>Rate Calculation</H2>
+    <p>
+      Calculates a rate for power of transportation that your line has in year averrage.<BR>
+      This calculation is usable for supply chaining and check how amount your current line can bring cargos in year averrage.<BR>
+      Also, the calculation output will be got close to your input which used in Frequency and Capacity Calculations.<BR>
+      &lt;exp&gt; 730 × Capacity ÷ Frequency(in sec) ＝ Rate(cargos per year)<BR>
+    </p>
+    <form name="calcrate" action="#">
+      730 × 
+      <input type="text" name="capacities"  placeholder="input your capacity">
+       ÷ 
+      <input type="text" name="frequencies" placeholder="input your frequency">
+      ＝
+      <button type="button" onclick="showrate()">Do it now</button>
+      <input type="text" name="result"      placeholder="">
+  </body>
+</html>
