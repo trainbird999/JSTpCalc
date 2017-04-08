@@ -75,11 +75,11 @@
       Your line going closer to calculated result will get more benefits.<BR>
       Your line going over from calculated result to larger will more lose your money.<BR>
       This calculation is useful for static capacity vehicle line like buses, ships and air planes.<BR>
-      &lt;exp&gt; 730 × Capacity ÷Ddemand(s) ＝ Frequency(in sec)<BR>
+      &lt;exp&gt; 730 × Capacity ÷ Demand(s) ＝ Frequency(in sec)<BR>
     </p>
     <form name="calcfreq" action="#">
       730 × 
-      <input type="text" name="capacities" placeholder="input your capacity">
+      <input type="text" name="capacities" placeholder="input cargo capacity">
        ÷ 
       <input type="text" name="demands"    placeholder="input your demand">
        ＝ 
@@ -100,7 +100,7 @@
     <form name="calccap" action="#">
       <input type="text" name="demands"     placeholder="input your demand">
        × 
-      <input type="text" name="frequencies" placeholder="input your frequency">
+      <input type="text" name="frequencies" placeholder="input line frequency">
       ÷ 730
       ＝
       <button type="button" onclick="showcap()">Do it now</button>
@@ -110,16 +110,16 @@
     
     <H2>Rate Calculation</H2>
     <p>
-      Calculates a rate for power of transportation that your line has in year averrage.<BR>
-      This calculation is usable for supply chaining and check how amount your current line can bring cargos in year averrage.<BR>
+      Calculates a rate for power of transportation that your line has in year average.<BR>
+      This calculation is usable for supply chaining and check how amount your current line can bring cargos in year average.<BR>
       Also, the calculation output will be got close to your input which used in Frequency and Capacity Calculations.<BR>
       &lt;exp&gt; 730 × Capacity ÷ Frequency(in sec) ＝ Rate(cargos per year)<BR>
     </p>
     <form name="calcrate" action="#">
       730 × 
-      <input type="text" name="capacities"  placeholder="input your capacity">
+      <input type="text" name="capacities"  placeholder="input cargo capacity">
        ÷ 
-      <input type="text" name="frequencies" placeholder="input your frequency">
+      <input type="text" name="frequencies" placeholder="input line frequency">
       ＝
       <button type="button" onclick="showrate()">Do it now</button>
       <input type="text" name="result"      placeholder="">
