@@ -2,7 +2,7 @@
 HTML+ECMAScriptで書かれたTransport Fever用の簡易計算スクリプト  
 JSTpCalc is calculation support script written with HTML + ECMAScript
 
-## 機能 / Feature  
+## 機能 / Features  
 * 頻度計算 ・・・ 需要または需要和と貨物積載量から理想的な運行頻度を求めます
 * Frequency Calculation ・・・ Calculates a better line frequency from depend or sum of depends and cargo capacity
 * 容量計算 ・・・ 需要または需要和と仮定的な運行頻度から理想的な貨物積載量を求めます
