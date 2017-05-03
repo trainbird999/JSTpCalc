@@ -12,7 +12,13 @@ JSTpCalc is calculation support script written with HTML + ECMAScript
 
 ## 使い方 / Usage  
 ECMAScript(Javascript)に対応のブラウザからhtmlファイルを開く  
-Open html file with html browser that supports ECMAScript(aka Javascript)
+Open html file with your html browser that supports ECMAScript(aka Javascript)
+
+## 協力 / Contribution
+See a project [JSTpCalc.gen](https://github.com/trainbird999/JSTpCalc.gen)
+
+## 翻訳 / Translation
+See a project [JSTpCalc.gen](https://github.com/trainbird999/JSTpCalc.gen)
 
 ## ライセンス / License
 GPLv3が適用されています。詳しくはこのリポジトリのLICENSEを参照  
