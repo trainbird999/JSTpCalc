@@ -3,72 +3,249 @@
   <meta charset="UTF-8">
   <!-- Copyright (C) 2017 trainbird999
 
-      This program is free software: you can redistribute it and/or modify
-      it under the terms of the GNU General Public License as published by
-      the Free Software Foundation, either version 3 of the License, or
-      (at your option) any later version.
-      
-      This program is distributed in the hope that it will be useful,
-      but WITHOUT ANY WARRANTY; without even the implied warranty of
-      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-      GNU General Public License for more details.
-      
-      You should have received a copy of the GNU General Public License
-      along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    -->
+       This program is free software: you can redistribute it and/or modify
+       it under the terms of the GNU General Public License as published by
+       the Free Software Foundation, either version 3 of the License, or
+       (at your option) any later version.
+
+       This program is distributed in the hope that it will be useful,
+       but WITHOUT ANY WARRANTY; without even the implied warranty of
+       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+       GNU General Public License for more details.
+
+       You should have received a copy of the GNU General Public License
+       along with this program.  If not, see <http://www.gnu.org/licenses/>.
+     -->
   <head>
     <title>JS Tpcalc - Transport Fever Caluculation Support Utility</title>
     <style type="text/css">
-      <!--
-          H2 {color: #ffb608;}
-          button {background: #b0b7c1; color: #2e3a50; border-style: none; border-radius: 7.5px;}
-          button:hover {background: #ffc618;}
-          input {background: #3e4a60; color: #d89ed2; font-size: 101%; text-align: center; border-style: none;}
-          body.darktheme {color: #eeeeee;background: #2e3a50;}
-        -->
+     <!--
+     H2 {color: #ffb608;}
+     button {background: #b0b7c1; color: #2e3a50; border-style: none; border-radius: 7.5px;}
+     button:hover {background: #ffc618;}
+     input {background: #3e4a60; color: #d89ed2; font-size: 101%; text-align: center; border-style: none;}
+     body.darktheme {color: #eeeeee;background: #2e3a50;}
+     form.rightalign {text-align: right;}
+     a.link {color: #d89ed2;}
+     -->
     </style>
   </head>
   <body class="darktheme">
     <script type="text/javascript">
-      <!--
-          sec_per_oneday = 2
-          sec_per_year = sec_per_oneday * 365
+     <!--
+     const sec_per_oneday = () => parseFloat(document.ms_per_day.ms_value.value) / 1000.0;
+     const sec_per_year   = () => sec_per_oneday() * 365;
 
-          function calcfrequency(capacities, demands) {
-          return sec_per_year * capacities / demands;
-          }
+     function updateSpyText(spy) {
+       let array    = Array.from(document.getElementsByTagName("span"));
+       let selected = array.filter((e) => e.id == "span_spy");
+       selected.forEach((e) => e.textContent = spy);
+     }
 
-          function showfreq() {
-          var demands    = parseFloat(document.calcfreq.demands.value);
-          var capacities = parseFloat(document.calcfreq.capacities.value);
-          document.calcfreq.result.value = calcfrequency(capacities, demands);
-          }
+     const oscillationBool = (initBool) => {
+       let current = !initBool;
+       return () => {
+         current = !current;
+         return current;
+       }
+     }
 
-          function calccapacity(demands, frequencies) {
-          var demands     = parseFloat(document.calccap.demands.value);
-          var frequencies = parseFloat(document.calccap.frequencies.value);
-          return demands * frequencies / sec_per_year;
-          }
+     const newSpan   = (id) => {
+       let newSpan           = document.createElement("span");
+       newSpan.id            = id;
+       return newSpan;
+     }
 
-          function showcap() {
-          var demands     = parseFloat(document.calccap.demands.value);
-          var frequencies = parseFloat(document.calccap.frequencies.value);
-          document.calccap.result.value  = calccapacity(demands, frequencies);
-          }
+     const newLabel  = (forId, text) => {
+       let newLabel          = document.createElement("label");
+       newLabel.for          = forId;
+       newLabel.textContent  = text;
+       return newLabel;
+     }
+     
+     const newSelect = (id, name, fonchange) => {
+       let newSelect         = document.createElement("select");
+       newSelect.id          = id;
+       newSelect.name        = name;
+       newSelect.onchange    = fonchange;
+       return newSelect;
+     }
 
-          function calcrate(capacities, frequencies) {
-          return sec_per_year * capacities / frequencies;
-          }
+     const newOption = (value, text) => {
+       let newOption         = document.createElement("option");
+       newOption.value       = value;
+       newOption.textContent = text;
+       return newOption;
+     }
 
-          function showrate() {
-          var capacities  = parseFloat(document.calcrate.capacities.value);
-          var frequencies = parseFloat(document.calcrate.frequencies.value);
-          document.calcrate.result.value = calcrate(capacities, frequencies);
-          }
-          // -->
+     const newInputForm = (type, name, placeholder, foninput) => {
+       let newInputForm         = document.createElement("input");
+       newInputForm.type        = type;
+       newInputForm.name        = name;
+       newInputForm.placeholder = placeholder;
+       newInputForm.oninput     = foninput;
+       newInputForm.onkeydown   = () => null;
+       return newInputForm;
+     }
+
+     const newDummyInputForm = () => {
+       let newInputForm         = document.createElement("input");
+       newInputForm.type        = "input";
+       newInputForm.name        = "dummyinput";
+       newInputForm.style       = "display:none;";
+       return newInputForm;
+     }
+
+     const newLink = (text, fonclick, styleName) => {
+       let newLink         = document.createElement("a");
+       newLink.textContent = text;
+       newLink.href        = "javascript void(0)";
+       newLink.onclick     = fonclick;
+       newLink.className   = (!(styleName == undefined))? styleName : undefined;
+       return newLink;
+     }
+
+     const modeSelectElement = () => {
+       let element = newLink(" 入力モード切り替え ",
+                             () => {
+                               toggleMsInputMenu(document.getElementById("target_span_menu_switch"));
+                               return false; // avoid document table jump with "#" like "foo.html#"
+                             },
+                             "link");
+       return element;
+     }
+
+
+     const addChildRecursively = (parentElement, elementGenerator) => {
+       let newElement = elementGenerator();
+       if (newElement == null) {
+         return;
+       } else {
+         parentElement.appendChild(newElement);
+         return addChildRecursively(parentElement, elementGenerator);
+       }
+     }
+
+     /*
+        Selecting Menu tags hierarchy **
+        <span>
+          <label>
+          <select>
+            <Option>
+            ...
+            <Option>
+          <label> // <- a link toggole switch
+        ** END
+     */
+     const constructSelectMenu = () => {
+       let newElementRoot = newSpan("target_span_menu_switch");                        // <span>
+
+       let label          = newLabel("ms_value", "ゲーム上の1日の時間を選択して下さい。知らない場合はこの項目は無視して下さい。 : "); // <label>
+       newElementRoot.appendChild(label);
+
+       let select         = newSelect("ms_value",                                      // <select>
+                                      "ms_value",
+                                      (event) => updateSpyText(sec_per_year()));
+       newElementRoot.appendChild(select);
+         
+       const optionGenerator = () => { /* Closure */                                   // <option>
+         const dArray = [["2000", "2秒(デフォルト)"],
+                         ["1000", "1秒"],
+                         ["3000", "3秒"],
+                         ["4000", "4秒"],
+                         ["5000", "5秒"],
+                         ["6000", "6秒"],
+                         ["7000", "7秒"],
+                         ["8000", "8秒(最大)"]];
+         let index    = 0;
+         let fGen     = () => {
+           if (index == dArray.length) {
+             return null;
+           } else {
+             let option = newOption(dArray[index][0], dArray[index][1]);
+             index = index + 1;
+             return option;
+           }
+         }
+         return fGen;
+       }
+       addChildRecursively(select, optionGenerator());
+
+       newElementRoot.appendChild(modeSelectElement());
+       
+       return newElementRoot;
+     }
+
+     /*
+        Inputing menu tags hierarchy **
+        <span>
+          <label>
+          <input>
+          <input> // dummy for avoidance of submission
+          <label> // <- a link toggle switch
+        ** END
+     */
+     const constructInputMenu = () => {
+       let newElementRoot = newSpan("target_span_menu_switch");                       // <span>
+
+       let label          = newLabel("ms_value", "ゲーム上の1日の時間を入力して下さい。知らない場合はこの項目は無視して下さい。 : "); // <label>
+       newElementRoot.appendChild(label);
+
+       let inputForm      = newInputForm("text",                                      // <input>
+                                         "ms_value",
+                                         "数値を入力(ミリ秒)",
+                                         (event) => updateSpyText(sec_per_year()));
+       
+       newElementRoot.appendChild(inputForm);
+       newElementRoot.appendChild(newDummyInputForm());                               // d<input>#dummy
+       newElementRoot.appendChild(modeSelectElement());
+       
+       return newElementRoot;
+     }
+
+     const tOrF = oscillationBool(true);
+     function toggleMsInputMenu(targetElement) {
+       if (tOrF()) {
+         targetElement.parentNode.replaceChild(constructSelectMenu(), targetElement);
+       } else {
+         targetElement.parentNode.replaceChild(constructInputMenu(), targetElement);
+       }
+     }
+
+
+     const calcfrequency = (capacities, demands) => sec_per_year() * capacities / demands;
+
+     function showfreq() {
+       let demands    = parseFloat(document.calcfreq.demands.value);
+       let capacities = parseFloat(document.calcfreq.capacities.value);
+       document.calcfreq.result.value = calcfrequency(capacities, demands);
+     }
+
+     const calccapacity = (demands, frequencies) => demands * frequencies / sec_per_year();
+
+     function showcap() {
+       let demands     = parseFloat(document.calccap.demands.value);
+       let frequencies = parseFloat(document.calccap.frequencies.value);
+       document.calccap.result.value  = calccapacity(demands, frequencies);
+     }
+
+     const calcrate = (capacities, frequencies) => sec_per_year() * capacities / frequencies;
+
+     function showrate() {
+       let capacities  = parseFloat(document.calcrate.capacities.value);
+       let frequencies = parseFloat(document.calcrate.frequencies.value);
+       document.calcrate.result.value = calcrate(capacities, frequencies);
+     }
+     // -->
     </script>
-    
-    
+
+    <form name="ms_per_day" class="rightalign">
+      <span id="target_span_menu_switch">
+        <script>toggleMsInputMenu(document.getElementById("target_span_menu_switch"));</script>
+      </span>
+    </form>
+
+
     <H2>頻度演算</H2>
     <p>
       需要と一台あたりの貨物容量から理想的な運行頻度を算出します。<BR>
@@ -77,16 +254,16 @@
       <式> 730 × 容量 ÷需要(年) ＝ 運行頻度(秒)<BR>
     </p>
     <form name="calcfreq" action="#">
-      730 × 
+      <span id="span_spy">730</span> ×
       <input type="text" name="capacities" placeholder="貨物容量を入力">
-       ÷ 
+      ÷
       <input type="text" name="demands"    placeholder="需要(和)を入力">
-       ＝ 
+      ＝
       <button type="button" onclick="showfreq()">算出</button>
       <input type="text" name="result"     placeholder="">
     </form>
 
-    
+
     <H2>容量演算</H2>
     <p>
       需要と期待出来る運行頻度から理想的な貨物容量を算出します。<BR>
@@ -97,15 +274,15 @@
     </p>
     <form name="calccap" action="#">
       <input type="text" name="demands"     placeholder="需要(和)を入力">
-       × 
+      ×
       <input type="text" name="frequencies" placeholder="運行頻度(秒)を入力">
-      ÷ 730
+      ÷ <span id="span_spy">730</span>
       ＝
       <button type="button" onclick="showcap()">算出</button>
       <input type="text" name="result"      placeholder="">
     </form>
 
-    
+
     <H2>レート演算</H2>
     <p>
       貨物容量と運行頻度から一年あたり平均どの位の運送能力があるかを算出します。<BR>
@@ -114,9 +291,9 @@
       <式> 730 × 容量 ÷ 運行頻度(秒) ＝ レート(年)<BR>
     </p>
     <form name="calcrate" action="#">
-      730 × 
+      <span id="span_spy">730</span> ×
       <input type="text" name="capacities"  placeholder="貨物容量を入力">
-       ÷ 
+      ÷
       <input type="text" name="frequencies" placeholder="運行頻度(秒)を入力">
       ＝
       <button type="button" onclick="showrate()">算出</button>

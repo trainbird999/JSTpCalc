@@ -3,72 +3,249 @@
   <meta charset="UTF-8">
   <!-- Copyright (C) 2017 trainbird999
 
-      This program is free software: you can redistribute it and/or modify
-      it under the terms of the GNU General Public License as published by
-      the Free Software Foundation, either version 3 of the License, or
-      (at your option) any later version.
-      
-      This program is distributed in the hope that it will be useful,
-      but WITHOUT ANY WARRANTY; without even the implied warranty of
-      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-      GNU General Public License for more details.
-      
-      You should have received a copy of the GNU General Public License
-      along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    -->
+       This program is free software: you can redistribute it and/or modify
+       it under the terms of the GNU General Public License as published by
+       the Free Software Foundation, either version 3 of the License, or
+       (at your option) any later version.
+
+       This program is distributed in the hope that it will be useful,
+       but WITHOUT ANY WARRANTY; without even the implied warranty of
+       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+       GNU General Public License for more details.
+
+       You should have received a copy of the GNU General Public License
+       along with this program.  If not, see <http://www.gnu.org/licenses/>.
+     -->
   <head>
     <title>JS Tpcalc - Transport Fever Caluculation Support Utility</title>
     <style type="text/css">
-      <!--
-          H2 {color: #ffb608;}
-          button {background: #b0b7c1; color: #2e3a50; border-style: none; border-radius: 7.5px;}
-          button:hover {background: #ffc618;}
-          input {background: #3e4a60; color: #d89ed2; font-size: 101%; text-align: center; border-style: none;}
-          body.darktheme {color: #eeeeee;background: #2e3a50;}
-        -->
+     <!--
+     H2 {color: #ffb608;}
+     button {background: #b0b7c1; color: #2e3a50; border-style: none; border-radius: 7.5px;}
+     button:hover {background: #ffc618;}
+     input {background: #3e4a60; color: #d89ed2; font-size: 101%; text-align: center; border-style: none;}
+     body.darktheme {color: #eeeeee;background: #2e3a50;}
+     form.rightalign {text-align: right;}
+     a.link {color: #d89ed2;}
+     -->
     </style>
   </head>
   <body class="darktheme">
     <script type="text/javascript">
-      <!--
-          sec_per_oneday = 2
-          sec_per_year = sec_per_oneday * 365
+     <!--
+     const sec_per_oneday = () => parseFloat(document.ms_per_day.ms_value.value) / 1000.0;
+     const sec_per_year   = () => sec_per_oneday() * 365;
 
-          function calcfrequency(capacities, demands) {
-          return sec_per_year * capacities / demands;
-          }
+     function updateSpyText(spy) {
+       let array    = Array.from(document.getElementsByTagName("span"));
+       let selected = array.filter((e) => e.id == "span_spy");
+       selected.forEach((e) => e.textContent = spy);
+     }
 
-          function showfreq() {
-          var demands    = parseFloat(document.calcfreq.demands.value);
-          var capacities = parseFloat(document.calcfreq.capacities.value);
-          document.calcfreq.result.value = calcfrequency(capacities, demands);
-          }
+     const oscillationBool = (initBool) => {
+       let current = !initBool;
+       return () => {
+         current = !current;
+         return current;
+       }
+     }
 
-          function calccapacity(demands, frequencies) {
-          var demands     = parseFloat(document.calccap.demands.value);
-          var frequencies = parseFloat(document.calccap.frequencies.value);
-          return demands * frequencies / sec_per_year;
-          }
+     const newSpan   = (id) => {
+       let newSpan           = document.createElement("span");
+       newSpan.id            = id;
+       return newSpan;
+     }
 
-          function showcap() {
-          var demands     = parseFloat(document.calccap.demands.value);
-          var frequencies = parseFloat(document.calccap.frequencies.value);
-          document.calccap.result.value  = calccapacity(demands, frequencies);
-          }
+     const newLabel  = (forId, text) => {
+       let newLabel          = document.createElement("label");
+       newLabel.for          = forId;
+       newLabel.textContent  = text;
+       return newLabel;
+     }
+     
+     const newSelect = (id, name, fonchange) => {
+       let newSelect         = document.createElement("select");
+       newSelect.id          = id;
+       newSelect.name        = name;
+       newSelect.onchange    = fonchange;
+       return newSelect;
+     }
 
-          function calcrate(capacities, frequencies) {
-          return sec_per_year * capacities / frequencies;
-          }
+     const newOption = (value, text) => {
+       let newOption         = document.createElement("option");
+       newOption.value       = value;
+       newOption.textContent = text;
+       return newOption;
+     }
 
-          function showrate() {
-          var capacities  = parseFloat(document.calcrate.capacities.value);
-          var frequencies = parseFloat(document.calcrate.frequencies.value);
-          document.calcrate.result.value = calcrate(capacities, frequencies);
-          }
-          // -->
+     const newInputForm = (type, name, placeholder, foninput) => {
+       let newInputForm         = document.createElement("input");
+       newInputForm.type        = type;
+       newInputForm.name        = name;
+       newInputForm.placeholder = placeholder;
+       newInputForm.oninput     = foninput;
+       newInputForm.onkeydown   = () => null;
+       return newInputForm;
+     }
+
+     const newDummyInputForm = () => {
+       let newInputForm         = document.createElement("input");
+       newInputForm.type        = "input";
+       newInputForm.name        = "dummyinput";
+       newInputForm.style       = "display:none;";
+       return newInputForm;
+     }
+
+     const newLink = (text, fonclick, styleName) => {
+       let newLink         = document.createElement("a");
+       newLink.textContent = text;
+       newLink.href        = "javascript void(0)";
+       newLink.onclick     = fonclick;
+       newLink.className   = (!(styleName == undefined))? styleName : undefined;
+       return newLink;
+     }
+
+     const modeSelectElement = () => {
+       let element = newLink(" Toggle Inputting Mode ",
+                             () => {
+                               toggleMsInputMenu(document.getElementById("target_span_menu_switch"));
+                               return false; // avoid document table jump with "#" like "foo.html#"
+                             },
+                             "link");
+       return element;
+     }
+
+
+     const addChildRecursively = (parentElement, elementGenerator) => {
+       let newElement = elementGenerator();
+       if (newElement == null) {
+         return;
+       } else {
+         parentElement.appendChild(newElement);
+         return addChildRecursively(parentElement, elementGenerator);
+       }
+     }
+
+     /*
+        Selecting Menu tags hierarchy **
+        <span>
+          <label>
+          <select>
+            <Option>
+            ...
+            <Option>
+          <label> // <- a link toggole switch
+        ** END
+     */
+     const constructSelectMenu = () => {
+       let newElementRoot = newSpan("target_span_menu_switch");                        // <span>
+
+       let label          = newLabel("ms_value", "Select millisPerDay valuable. Ignore this if not know. : "); // <label>
+       newElementRoot.appendChild(label);
+
+       let select         = newSelect("ms_value",                                      // <select>
+                                      "ms_value",
+                                      (event) => updateSpyText(sec_per_year()));
+       newElementRoot.appendChild(select);
+         
+       const optionGenerator = () => { /* Closure */                                   // <option>
+         const dArray = [["2000", "2sec (default)"],
+                         ["1000", "1sec"],
+                         ["3000", "3sec"],
+                         ["4000", "4sec"],
+                         ["5000", "5sec"],
+                         ["6000", "6sec"],
+                         ["7000", "7sec"],
+                         ["8000", "8sec (max in game)"]];
+         let index    = 0;
+         let fGen     = () => {
+           if (index == dArray.length) {
+             return null;
+           } else {
+             let option = newOption(dArray[index][0], dArray[index][1]);
+             index = index + 1;
+             return option;
+           }
+         }
+         return fGen;
+       }
+       addChildRecursively(select, optionGenerator());
+
+       newElementRoot.appendChild(modeSelectElement());
+       
+       return newElementRoot;
+     }
+
+     /*
+        Inputing menu tags hierarchy **
+        <span>
+          <label>
+          <input>
+          <input> // dummy for avoidance of submission
+          <label> // <- a link toggle switch
+        ** END
+     */
+     const constructInputMenu = () => {
+       let newElementRoot = newSpan("target_span_menu_switch");                       // <span>
+
+       let label          = newLabel("ms_value", "Input millisPerDay valuable. Can ignore this if not know. : "); // <label>
+       newElementRoot.appendChild(label);
+
+       let inputForm      = newInputForm("text",                                      // <input>
+                                         "ms_value",
+                                         "input here(in milliseconds)",
+                                         (event) => updateSpyText(sec_per_year()));
+       
+       newElementRoot.appendChild(inputForm);
+       newElementRoot.appendChild(newDummyInputForm());                               // d<input>#dummy
+       newElementRoot.appendChild(modeSelectElement());
+       
+       return newElementRoot;
+     }
+
+     const tOrF = oscillationBool(true);
+     function toggleMsInputMenu(targetElement) {
+       if (tOrF()) {
+         targetElement.parentNode.replaceChild(constructSelectMenu(), targetElement);
+       } else {
+         targetElement.parentNode.replaceChild(constructInputMenu(), targetElement);
+       }
+     }
+
+
+     const calcfrequency = (capacities, demands) => sec_per_year() * capacities / demands;
+
+     function showfreq() {
+       let demands    = parseFloat(document.calcfreq.demands.value);
+       let capacities = parseFloat(document.calcfreq.capacities.value);
+       document.calcfreq.result.value = calcfrequency(capacities, demands);
+     }
+
+     const calccapacity = (demands, frequencies) => demands * frequencies / sec_per_year();
+
+     function showcap() {
+       let demands     = parseFloat(document.calccap.demands.value);
+       let frequencies = parseFloat(document.calccap.frequencies.value);
+       document.calccap.result.value  = calccapacity(demands, frequencies);
+     }
+
+     const calcrate = (capacities, frequencies) => sec_per_year() * capacities / frequencies;
+
+     function showrate() {
+       let capacities  = parseFloat(document.calcrate.capacities.value);
+       let frequencies = parseFloat(document.calcrate.frequencies.value);
+       document.calcrate.result.value = calcrate(capacities, frequencies);
+     }
+     // -->
     </script>
-    
-    
+
+    <form name="ms_per_day" class="rightalign">
+      <span id="target_span_menu_switch">
+        <script>toggleMsInputMenu(document.getElementById("target_span_menu_switch"));</script>
+      </span>
+    </form>
+
+
     <H2>Frequency Calculation</H2>
     <p>
       Calculates a better line frequency(in sec) from demand(s) and vehicle cargo capacity.<BR>
@@ -78,36 +255,36 @@
       &lt;exp&gt; 730 × Capacity ÷ Demand(s) ＝ Frequency(in sec)<BR>
     </p>
     <form name="calcfreq" action="#">
-      730 × 
+      <span id="span_spy">730</span> ×
       <input type="text" name="capacities" placeholder="input cargo capacity">
-       ÷ 
+      ÷
       <input type="text" name="demands"    placeholder="input your demand">
-       ＝ 
+      ＝
       <button type="button" onclick="showfreq()">Do it now</button>
       <input type="text" name="result"     placeholder="">
     </form>
 
-    
+
     <H2>Capacity Calculation</H2>
     <p>
       Calculates a better line capacity from demand(s) and line frequency(in sec).<BR>
-      At first, you are needed to take a best frequency time in game with locomotives and a cargo car you supposed.<BR>
-      and That is needed re-calculation again, if it is getting slower or record faster.<BR>
-      Getting too larger capacites will be resolved to split the line with new vehicle.<BR>
-      This calculation is useful for flexible vehicle line.<BR>
+      At first, you are needed to take a best frequency time in game with train set(locomotive(s) + cargo car(s)) that you supposed.<BR>
+      and That time might be needed re-calculation again, if it's getting slower or records faster.<BR>
+      Some problem getting too larger capacity demands will be resolved by copy clones or adding new train sets.<BR>
+      This calculation is useful for flexible capacity vehicle line.<BR>
       &lt;exp&gt; Demand(s) × Frequency(in sec) ÷ 730 ＝ Capacity<BR>
     </p>
     <form name="calccap" action="#">
       <input type="text" name="demands"     placeholder="input your demand">
-       × 
+      ×
       <input type="text" name="frequencies" placeholder="input line frequency">
-      ÷ 730
+      ÷ <span id="span_spy">730</span>
       ＝
       <button type="button" onclick="showcap()">Do it now</button>
       <input type="text" name="result"      placeholder="">
     </form>
 
-    
+
     <H2>Rate Calculation</H2>
     <p>
       Calculates a rate for power of transportation that your line has in year average.<BR>
@@ -116,9 +293,9 @@
       &lt;exp&gt; 730 × Capacity ÷ Frequency(in sec) ＝ Rate(cargos per year)<BR>
     </p>
     <form name="calcrate" action="#">
-      730 × 
+      <span id="span_spy">730</span> ×
       <input type="text" name="capacities"  placeholder="input cargo capacity">
-       ÷ 
+      ÷
       <input type="text" name="frequencies" placeholder="input line frequency">
       ＝
       <button type="button" onclick="showrate()">Do it now</button>
